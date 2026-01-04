@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f6fa;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tab.active {
+            background: #00b894;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #00b894;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button[type="submit"], .btn-primary {
+            background: #00b894;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover, .btn-primary:hover {
+            background: #00cec9;
+        }
+
+        .btn-danger {
+            background: #d63031;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00b894;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .card-actions {
+            margin-top: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .badge-success {
+            background: #55efc4;
+            color: #00b894;
+        }
+
+        .badge-warning {
+            background: #fdcb6e;
+            color: #e17055;
+        }
+
+        .badge-info {
+            background: #74b9ff;
+            color: #0984e3;
+        }
+
+        .success-message {
+            background: #55efc4;
+            color: #00b894;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #ff7675;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h2 {
+            font-size: 36px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .grade-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .grade-summary {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .grade-summary h2 {
+            font-size: 48px;
+            margin-bottom: 5px;
+        }
+
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .rubric-table th {
+            background: #f0f0f0;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .rubric-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .rubric-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        small {
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🎓 Student Portal</h1>
+        <div class="user-info">
+            <div class="user-badge" id="userBadge">ID: Loading...</div>
+            <span id="userName">Welcome, Student</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="success-message" id="successMessage"></div>
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h2 id="classCount">0</h2>
+                <p>My Classes</p>
+            </div>
+            <div class="stat-card">
+                <h2 id="assignmentCount">0</h2>
+                <p>Available Assignments</p>
+            </div>
+            <div class="stat-card">
+                <h2 id="gradeCount">0</h2>
+                <p>Graded Assignments</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('classes')">My Classes</button>
+            <button class="tab" onclick="showTab('assignments')">Assignments</button>
+            <button class="tab" onclick="showTab('submissions')">My Submissions</button>
+            <button class="tab" onclick="showTab('grades')">My Grades</button>
+        </div>
+
+        <!-- My Classes Tab -->
+        <div id="classes" class="tab-content active">
+            <h2>My Enrolled Classes</h2>
+            <div id="classesList"></div>
+        </div>
+
+        <!-- Assignments Tab -->
+        <div id="assignments" class="tab-content">
+            <h2>Available Assignments</h2>
+
+            <div class="form-group">
+                <label for="filterClass">Filter by Class</label>
+                <select id="filterClass" onchange="loadAssignments()">
+                    <option value="">All Classes</option>
+                </select>
+            </div>
+
+            <div id="assignmentsList"></div>
+        </div>
+
+        <!-- My Submissions Tab -->
+        <div id="submissions" class="tab-content">
+            <h2>My Submissions</h2>
+            <div id="submissionsList"></div>
+        </div>
+
+        <!-- My Grades Tab -->
+        <div id="grades" class="tab-content">
+            <h2>My Grades</h2>
+            <div id="gradesList"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5001/api';
+        let currentUser = null;
+        let myClasses = [];
+        let myAssignments = [];
+        let mySubmissions = [];
+
+        function checkAuth() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = JSON.parse(user);
+
+            if (currentUser.role !== 'student') {
+                alert('Access denied. Students only.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('userName').textContent = `${currentUser.first_name} ${currentUser.last_name}`;
+            document.getElementById('userBadge').textContent = `ID: ${currentUser.unique_id}`;
+
+            loadDashboard();
+        }
+
+        async function loadDashboard() {
+            await loadClasses();
+            await loadAssignments();
+            await loadSubmissions();
+            await loadGrades();
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function showMessage(message, type = 'success') {
+            const msgElement = document.getElementById(type === 'success' ? 'successMessage' : 'errorMessage');
+            msgElement.textContent = message;
+            msgElement.style.display = 'block';
+            setTimeout(() => {
+                msgElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // ===========================
+        // CLASSES
+        // ===========================
+
+        async function loadClasses() {
+            try {
+                const response = await fetch(`${API_URL}/students/${currentUser.user_id}/classes`);
+                myClasses = await response.json();
+
+                const html = myClasses.map(c => `
+                    <div class="card">
+                        <h3>${c.class_code} - ${c.class_name}</h3>
+                        <p>${c.description || 'No description'}</p>
+                        <span class="badge badge-success">✓ Enrolled</span>
+                    </div>
+                `).join('');
+
+                document.getElementById('classesList').innerHTML = html || '<p>You are not enrolled in any classes yet.</p>';
+                document.getElementById('classCount').textContent = myClasses.length;
+
+                const options = myClasses.map(c =>
+                    `<option value="${c.class_id}">${c.class_code} - ${c.class_name}</option>`
+                ).join('');
+
+                document.getElementById('filterClass').innerHTML =
+                    '<option value="">All Classes</option>' + options;
+            } catch (error) {
+                console.error('Error loading classes:', error);
+            }
+        }
+
+        // ===========================
+        // ASSIGNMENTS
+        // ===========================
+
+        async function loadAssignments() {
+            const filterClassId = document.getElementById('filterClass').value;
+
+            try {
+                const classIds = filterClassId ? [parseInt(filterClassId)] : myClasses.map(c => c.class_id);
+
+                let allAssignments = [];
+                for (const classId of classIds) {
+                    const response = await fetch(`${API_URL}/assignments?class_id=${classId}`);
+                    const assignments = await response.json();
+                    allAssignments = allAssignments.concat(assignments);
+                }
+
+                myAssignments = allAssignments;
+
+                const html = allAssignments.map(a => {
+                    const alreadySubmitted = mySubmissions.some(s => s.assignment_id === a.assignment_id);
+                    const dueDate = new Date(a.due_date);
+                    const isPastDue = dueDate < new Date();
+
+                    return `
+                        <div class="card">
+                            <h3>${a.title}</h3>
+                            <p><strong>Class:</strong> ${a.class_code} - ${a.class_name}</p>
+                            <p><strong>Due:</strong> ${dueDate.toLocaleString()} ${isPastDue ? '<span class="badge badge-warning">Past Due</span>' : ''}</p>
+                            <p><strong>Max Points:</strong> ${a.max_points}</p>
+                            <p>${a.description || 'No description'}</p>
+
+                            ${alreadySubmitted ?
+                                '<span class="badge badge-success">✓ Submitted</span>' :
+                                `<button class="btn-primary" onclick="showSubmitForm(${a.assignment_id}, '${a.title}')">Submit Assignment</button>`
+                            }
+
+                            <div id="submitForm_${a.assignment_id}" style="display: none; margin-top: 20px; background: #f0f0f0; padding: 20px; border-radius: 8px;">
+                                <h4>Submit: ${a.title}</h4>
+                                <form onsubmit="submitAssignment(event, ${a.assignment_id})">
+                                    <div class="form-group">
+                                        <label>Submission Text *</label>
+                                        <textarea id="submissionText_${a.assignment_id}" required
+                                                  placeholder="Enter your submission text here..."></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>File Path/URL (Optional)</label>
+                                        <input type="text" id="filePath_${a.assignment_id}"
+                                               placeholder="e.g., https://github.com/username/project">
+                                        <small>Enter a link to your file (GitHub, Google Drive, etc.)</small>
+                                    </div>
+                                    <button type="submit">Submit Assignment</button>
+                                    <button type="button" class="btn-danger" onclick="hideSubmitForm(${a.assignment_id})">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('assignmentsList').innerHTML = html || '<p>No assignments available.</p>';
+                document.getElementById('assignmentCount').textContent = allAssignments.length;
+            } catch (error) {
+                console.error('Error loading assignments:', error);
+            }
+        }
+
+        function showSubmitForm(assignmentId, title) {
+            document.getElementById(`submitForm_${assignmentId}`).style.display = 'block';
+        }
+
+        function hideSubmitForm(assignmentId) {
+            document.getElementById(`submitForm_${assignmentId}`).style.display = 'none';
+        }
+
+        async function submitAssignment(event, assignmentId) {
+            event.preventDefault();
+
+            const data = {
+                assignment_id: assignmentId,
+                student_id: currentUser.user_id,
+                submission_text: document.getElementById(`submissionText_${assignmentId}`).value,
+                file_path: document.getElementById(`filePath_${assignmentId}`).value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/submissions`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage('Assignment submitted successfully! ✅');
+                    hideSubmitForm(assignmentId);
+                    loadAssignments();
+                    loadSubmissions();
+                } else {
+                    showMessage(result.error || 'Failed to submit assignment', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ===========================
+        // SUBMISSIONS
+        // ===========================
+
+        async function loadSubmissions() {
+            try {
+                const response = await fetch(`${API_URL}/submissions?student_id=${currentUser.user_id}`);
+                mySubmissions = await response.json();
+
+                const html = mySubmissions.map(s => `
+                    <div class="card">
+                        <h3>${s.assignment_title}</h3>
+                        <p><strong>Submitted:</strong> ${new Date(s.submitted_at).toLocaleString()}</p>
+                        <p><strong>Status:</strong> <span class="badge ${s.status === 'graded' ? 'badge-success' : 'badge-warning'}">${s.status}</span></p>
+                        <p><strong>Submission:</strong> ${s.submission_text}</p>
+                        ${s.file_path ? `<p><strong>File:</strong> <a href="${s.file_path}" target="_blank">${s.file_path}</a></p>` : ''}
+
+                        ${s.status === 'submitted' ? `
+                            <div class="card-actions">
+                                <button class="btn-danger" onclick="deleteSubmission(${s.submission_id}, '${s.assignment_title}')">
+                                    Delete Submission
+                                </button>
+                                <small style="display: block; margin-top: 5px;">You can only delete ungraded submissions</small>
+                            </div>
+                        ` : '<p style="color: #00b894; margin-top: 10px;">✅ This submission has been graded</p>'}
+                    </div>
+                `).join('');
+
+                document.getElementById('submissionsList').innerHTML = html || '<p>You have not submitted any assignments yet.</p>';
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+            }
+        }
+
+        async function deleteSubmission(submissionId, assignmentTitle) {
+            if (!confirm(`Delete your submission for "${assignmentTitle}"? This cannot be undone!`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/submissions/${submissionId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage('Submission deleted successfully!');
+                    loadSubmissions();
+                    loadAssignments();
+                } else {
+                    showMessage(result.error || 'Failed to delete submission', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        // ===========================
+        // GRADES
+        // ===========================
+
+        async function loadGrades() {
+            try {
+                const response = await fetch(`${API_URL}/grades/student/${currentUser.user_id}`);
+                const grades = await response.json();
+
+                const html = grades.map(g => {
+                    const percentage = g.max_points > 0 ? ((g.total_points / g.max_points) * 100).toFixed(1) : 0;
+
+                    return `
+                        <div class="grade-card">
+                            <h3>${g.assignment_title}</h3>
+
+                            <div class="grade-summary">
+                                <h2>${g.total_points} / ${g.max_points}</h2>
+                                <p>${percentage}%</p>
+                            </div>
+
+                            ${g.rubric_grades && g.rubric_grades.length > 0 ? `
+                                <h4>Rubric Breakdown:</h4>
+                                <table class="rubric-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Criterion</th>
+                                            <th>Points Earned</th>
+                                            <th>Max Points</th>
+                                            <th>Feedback</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${g.rubric_grades.map(r => `
+                                            <tr>
+                                                <td><strong>${r.criterion_name}</strong></td>
+                                                <td>${r.points_earned}</td>
+                                                <td>${r.max_points}</td>
+                                                <td>${r.feedback || 'No feedback'}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            ` : ''}
+
+                            ${g.overall_feedback ? `
+                                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                                    <h4>Overall Feedback:</h4>
+                                    <p>${g.overall_feedback}</p>
+                                </div>
+                            ` : ''}
+
+                            <p style="color: #999; margin-top: 15px; font-size: 13px;">
+                                <strong>Graded:</strong> ${new Date(g.graded_at).toLocaleString()}
+                            </p>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('gradesList').innerHTML = html || '<p>No grades available yet.</p>';
+                document.getElementById('gradeCount').textContent = grades.length;
+            } catch (error) {
+                console.error('Error loading grades:', error);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        checkAuth();
+    </script>
+</body>
+</html>
