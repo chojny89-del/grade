@@ -12,7 +12,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///grading_system.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-CORS(app)
+
+# ✅ CORS: pozwól na wywołania z GitHub Pages (Twoja domena)
+CORS(
+    app,
+    resources={r"/api/*": {"origins": ["https://chojny89-del.github.io"]}},
+    supports_credentials=True
+)
+
+# ✅ Dopnij nagłówki i metody, żeby preflight OPTIONS przechodził
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
+    return response
 
 
 # ===========================
@@ -119,7 +132,7 @@ def generate_unique_id(role):
 # AUTHENTICATION
 # ===========================
 
-@app.route('/api/auth/register', methods=['POST'])
+@app.route('/api/auth/register', methods=['POST', 'OPTIONS'])
 def register():
     data = request.json
 
@@ -155,7 +168,7 @@ def register():
     }), 201
 
 
-@app.route('/api/auth/login', methods=['POST'])
+@app.route('/api/auth/login', methods=['POST', 'OPTIONS'])
 def login():
     data = request.json
     user = User.query.filter_by(email=data['email']).first()
@@ -180,7 +193,7 @@ def login():
 # CLASSES
 # ===========================
 
-@app.route('/api/classes', methods=['GET', 'POST'])
+@app.route('/api/classes', methods=['GET', 'POST', 'OPTIONS'])
 def handle_classes():
     if request.method == 'POST':
         data = request.json
@@ -242,7 +255,7 @@ def delete_class(class_id):
 # ENROLLMENTS
 # ===========================
 
-@app.route('/api/enrollments', methods=['POST'])
+@app.route('/api/enrollments', methods=['POST', 'OPTIONS'])
 def enroll_student():
     data = request.json
 
@@ -303,7 +316,7 @@ def get_student_classes(student_id):
 # ASSIGNMENTS
 # ===========================
 
-@app.route('/api/assignments', methods=['GET', 'POST'])
+@app.route('/api/assignments', methods=['GET', 'POST', 'OPTIONS'])
 def handle_assignments():
     if request.method == 'POST':
         data = request.json
@@ -364,7 +377,7 @@ def delete_assignment(assignment_id):
 # RUBRICS
 # ===========================
 
-@app.route('/api/rubrics', methods=['GET', 'POST'])
+@app.route('/api/rubrics', methods=['GET', 'POST', 'OPTIONS'])
 def handle_rubrics():
     if request.method == 'POST':
         data = request.json
@@ -400,7 +413,7 @@ def handle_rubrics():
 # SUBMISSIONS
 # ===========================
 
-@app.route('/api/submissions', methods=['GET', 'POST'])
+@app.route('/api/submissions', methods=['GET', 'POST', 'OPTIONS'])
 def handle_submissions():
     if request.method == 'POST':
         data = request.json
@@ -474,7 +487,7 @@ def delete_submission(submission_id):
 # GRADING
 # ===========================
 
-@app.route('/api/grades', methods=['POST'])
+@app.route('/api/grades', methods=['POST', 'OPTIONS'])
 def create_grade():
     data = request.json
 
@@ -495,7 +508,7 @@ def create_grade():
     return jsonify({'message': 'Grade saved'}), 201
 
 
-@app.route('/api/overall-grades', methods=['POST'])
+@app.route('/api/overall-grades', methods=['POST', 'OPTIONS'])
 def create_overall_grade():
     data = request.json
 
